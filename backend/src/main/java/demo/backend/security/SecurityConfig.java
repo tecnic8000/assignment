@@ -71,6 +71,7 @@ public class SecurityConfig {
      public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
           http.cors(Customizer.withDefaults()).authorizeHttpRequests(configurer -> configurer
                .requestMatchers(HttpMethod.GET, "/api/ping").permitAll()
+               .requestMatchers(HttpMethod.GET, "/admin/**").permitAll()
 
                .requestMatchers(HttpMethod.POST, "/api/user/signup").permitAll()
                .requestMatchers(HttpMethod.POST, "/api/user/login").permitAll()

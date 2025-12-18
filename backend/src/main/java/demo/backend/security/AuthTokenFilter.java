@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthTokenFilter extends OncePerRequestFilter{
+public class AuthTokenFilter extends OncePerRequestFilter {
 
   @Autowired
   private JwtUtil jwtUtil;
@@ -36,7 +36,8 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 
     String path = request.getRequestURI();
     // for public endpoints
-    if (path.equals("/api/signin2") || path.equals("/api/signup2")){
+    if (path.equals("/api/user/login") || path.equals("/api/user/signup") || path.equals("/api/product/view")
+        || path.startsWith("/admin") || path.equals("/api/ping")) {
       logger.info("Bypassing JWT filter for public endpoint: {}", path);
       filterChain.doFilter(request, response);
       return;
@@ -47,7 +48,8 @@ public class AuthTokenFilter extends OncePerRequestFilter{
       if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
         String username = jwtUtil.getUsernameFromJwtToken(jwt);
         UserDetails userDetails = userDetailsImpl.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
@@ -57,9 +59,9 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     filterChain.doFilter(request, response);
   }
 
-  private String parseJwt(HttpServletRequest request){
+  private String parseJwt(HttpServletRequest request) {
     String headerAuth = request.getHeader("Authorization");
-    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
+    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
       return headerAuth.substring(7, headerAuth.length());
     }
     return null;

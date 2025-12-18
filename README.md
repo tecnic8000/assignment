@@ -56,3 +56,5 @@ feature: local SSL
 
 !
 
+# Unimplemented Features
+- Refresh JWT rotation

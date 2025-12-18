@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RestAdmin {
 
      // log in
-     @GetMapping("/")
+     @GetMapping
      public String login() {
          return "admin";
      }
