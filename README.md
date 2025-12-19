@@ -38,23 +38,23 @@ proof of concept submission
 
 # frontend
 stack: zod, axios, zustand, mkcert, reactRouterDOM, tailwindcss
-!
-
+!-submit zustand state
+!-reconfirm JWT lifespans
+- need to set maximum quantity according to current stock
+-currency format
 
 # backend
-- create
-!-THYMELEAF
+!-SSL crashed
+!
 !-Bruno & curl
-!-reconfirm JWT lifespans
-!-DEDUCT STOCK
 !-write tests
-!-redis to session admin
 !-redis pwd is not set, recheck application.properties
 
 # database
 feature: local SSL
-
-!
+ManyToMany; food tags drink,food, cheese, chocolate, cream
+!- orderItem is separate TABLE OrderDetail
 
 # Unimplemented Features
 - Refresh JWT rotation
+- Pagination for  product, order

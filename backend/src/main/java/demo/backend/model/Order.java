@@ -1,6 +1,8 @@
 package demo.backend.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,9 +24,9 @@ public class Order {
      @Column(name = "id")
      private UUID id;
 
-     @JdbcTypeCode(SqlTypes.ARRAY)
-     @Column(name = "order_item", columnDefinition = "text[]")
-     private String[] orderItem; 
+     @JdbcTypeCode(SqlTypes.JSON)
+     @Column(name = "order_items", columnDefinition = "jsonb")
+     private List<OrderItem> orderItems = new ArrayList<>(); 
 
      @Column(name = "order_status")
      private String orderStatus;
@@ -39,8 +41,8 @@ public class Order {
      @Column(name = "created_at")
      private Timestamp createdAt;
 
-     @ManyToOne(cascade = {CascadeType.ALL})
-     @JoinColumn(name = "customer_id")
-     private User customerId;
+     @ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "fk_order_customer"))
+     private User customer;
 
 }

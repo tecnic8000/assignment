@@ -3,14 +3,17 @@ package demo.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import demo.backend.model.Order;
+import demo.backend.model.OrderItem;
+import demo.backend.model.Product;
 import demo.backend.model.User;
 import demo.backend.security.JwtUtil;
 import demo.backend.service.OrderService;
+import demo.backend.service.ProductService;
 import demo.backend.service.UserService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api/order")
 public class RestOrder {
@@ -33,16 +35,16 @@ public class RestOrder {
      JwtUtil jwtUtil;
 
      private OrderService orderService;
+     private ProductService productService;
      private UserService userService;
-     private ObjectMapper objectMapper;
 
      public RestOrder(
                OrderService theOrderService,
-               UserService theUserService,
-               ObjectMapper theObjectMapper) {
+               ProductService theProdService,
+               UserService theUserService) {
           orderService = theOrderService;
+          productService = theProdService;
           userService = theUserService;
-          objectMapper = theObjectMapper;
      }
 
      // HANDLE NEW ORDER SUBMISSION
@@ -73,9 +75,12 @@ public class RestOrder {
           User foundUser = jwtUser.get();
           Order submiteOrder = orderService.create(newOrder, foundUser.getId());
 
-          // TODO: DEDUCT STOCK to product table
-          // read order items
-
+          // DEDUCT STOCK
+          List<OrderItem> items = newOrder.getOrderItems();
+          for (OrderItem item : items) {
+               Product itemProduct = productService.findProductById(item.getItemId());
+               productService.updateStock(itemProduct, item.getQuantity());
+          }
           return ResponseEntity.ok(Map.of("message", "order created: " + submiteOrder));
      }
 
@@ -108,5 +113,5 @@ public class RestOrder {
      public ResponseEntity<?> viewAll(@RequestParam String param) {
           return ResponseEntity.ok(Map.of("message", "order list for admin"));
      }
-     
+
 }

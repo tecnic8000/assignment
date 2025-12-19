@@ -35,11 +35,11 @@ public class User {
      private String role;
 
      @CreationTimestamp
-     @Column(name = "create_at")
+     @Column(name = "created_at")
      private Timestamp createdAt;
 
      @JsonIgnore
-     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
      private List<Order> orders;
      
 }

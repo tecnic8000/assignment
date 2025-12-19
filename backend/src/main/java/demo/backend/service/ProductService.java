@@ -1,7 +1,7 @@
 package demo.backend.service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -30,9 +30,29 @@ public class ProductService {
           return productRepo.findAll();
      }
 
+     public Product findProductById(Integer theId){
+          Optional<Product> orderProduct = productRepo.findById(theId);
+          if (!orderProduct.isPresent()){
+               throw new RuntimeException("no ProductId found --"+theId);
+          }
+          return  orderProduct.get();
+     }
+
+     // UPDATE STOCK: DEDUCT AND AUTO-DELETE IF 0
+     public void updateStock(Product theProduct, Integer deductAmount){
+          Integer currentStock = theProduct.getProductStock();
+          Integer newStock = currentStock - deductAmount;
+          boolean soldOut = newStock == 0;
+          if (soldOut) {
+               productRepo.deleteById(theProduct.getId());
+          } else {
+               theProduct.setProductStock(newStock);
+          }
+     }
+
      // DELETE A PRODUCT
      @Transactional
-     public void delete(UUID theProductId){
+     public void delete(Integer theProductId){
           productRepo.deleteById(theProductId);
      }
 }

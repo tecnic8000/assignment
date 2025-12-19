@@ -1,49 +1,32 @@
--- Insert 6 users (1 admin, 5 customers)
+-- Insert 3 users (1 admin, 2 customers)
 INSERT INTO demo.users (id, username, password, role) VALUES
 ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin_user', 'hashed_password_1', 'admin'),
-('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'john_doe', 'hashed_password_2', 'customer'),
-('c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'jane_smith', 'hashed_password_3', 'customer'),
-('d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'mike_wilson', 'hashed_password_4', 'customer'),
 ('e4eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'sarah_jones', 'hashed_password_5', 'customer'),
 ('f5eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'david_brown', 'hashed_password_6', 'customer');
 
--- Insert 15 products
+-- Insert 10 products
 INSERT INTO demo.products (id, product_name, product_desc, product_price, product_stock) VALUES
-('10000000-0000-0000-0000-000000000001', 'Laptop Pro 15', 'High-performance laptop with 16GB RAM', 25000000, 15),
-('10000000-0000-0000-0000-000000000002', 'Wireless Mouse', 'Ergonomic wireless mouse with USB receiver', 350000, 50),
-('10000000-0000-0000-0000-000000000003', 'Mechanical Keyboard', 'RGB backlit mechanical gaming keyboard', 1500000, 30),
-('10000000-0000-0000-0000-000000000004', 'USB-C Hub', '7-in-1 USB-C hub with HDMI and card reader', 750000, 40),
-('10000000-0000-0000-0000-000000000005', 'Webcam HD', '1080p webcam with built-in microphone', 1200000, 25),
-('10000000-0000-0000-0000-000000000006', 'Headphones Pro', 'Noise-cancelling over-ear headphones', 3500000, 20),
-('10000000-0000-0000-0000-000000000007', 'Portable SSD 1TB', 'External solid state drive 1TB', 2800000, 35),
-('10000000-0000-0000-0000-000000000008', 'Monitor 27"', '27-inch 4K IPS monitor', 8500000, 12),
-('10000000-0000-0000-0000-000000000009', 'Desk Lamp LED', 'Adjustable LED desk lamp with USB charging', 450000, 60),
-('10000000-0000-0000-0000-000000000010', 'Laptop Stand', 'Aluminum adjustable laptop stand', 550000, 45),
-('10000000-0000-0000-0000-000000000011', 'Cable Organizer', 'Desktop cable management box', 180000, 100),
-('10000000-0000-0000-0000-000000000012', 'Phone Holder', 'Adjustable phone stand for desk', 120000, 80),
-('10000000-0000-0000-0000-000000000013', 'Cleaning Kit', 'Electronics cleaning kit with spray', 250000, 70),
-('10000000-0000-0000-0000-000000000014', 'Mousepad XL', 'Extended gaming mousepad 900x400mm', 320000, 55),
-('10000000-0000-0000-0000-000000000015', 'Webcam Cover', 'Privacy sliding webcam cover 3-pack', 85000, 150);
+(1, 'Wireless Mouse', 'Ergonomic wireless mouse with 2.4GHz connectivity and adjustable DPI', 25000, 150),
+(2, 'USB-C Cable', '6ft braided USB-C charging cable, fast charging compatible', 12000, 300),
+(3, 'Desk Lamp', 'LED desk lamp with 3 brightness levels and flexible neck', 35000, 75),
+(4, 'Notebook Set', 'Pack of 3 lined notebooks, 100 pages each, A5 size', 15000, 200),
+(5, 'Water Bottle', 'Stainless steel insulated water bottle, 32oz capacity', 28000, 120),
+(6, 'Phone Stand', 'Adjustable aluminum phone stand for desk use', 18000, 180),
+(7, 'Bluetooth Speaker', 'Portable waterproof speaker with 12-hour battery life', 45000, 90),
+(8, 'Mechanical Pencil', 'Professional 0.5mm mechanical pencil with metal body', 8000, 250),
+(9, 'Laptop Sleeve', '13-inch padded laptop sleeve with front pocket', 22000, 100),
+(10, 'Desk Organizer', 'Bamboo desk organizer with multiple compartments', 32000, 65);
 
--- Insert 20 orders
-INSERT INTO demo.orders (id, order_item, order_status, payment_total, customer_id, order_detail) VALUES
-('20000000-0000-0000-0000-000000000001', ARRAY['10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002'], 'delivered', 25350000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Express shipping requested'),
-('20000000-0000-0000-0000-000000000002', ARRAY['10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000014'], 'completed', 1820000, 'c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Gift wrapped'),
-('20000000-0000-0000-0000-000000000003', ARRAY['10000000-0000-0000-0000-000000000008'], 'shipping', 8500000, 'd3eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'Fragile - handle with care'),
-('20000000-0000-0000-0000-000000000004', ARRAY['10000000-0000-0000-0000-000000000006', '10000000-0000-0000-0000-000000000005'], 'confirmed', 4700000, 'e4eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', NULL),
-('20000000-0000-0000-0000-000000000005', ARRAY['10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012', '10000000-0000-0000-0000-000000000013'], 'delivered', 550000, 'f5eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'Office supplies'),
-('20000000-0000-0000-0000-000000000006', ARRAY['10000000-0000-0000-0000-000000000007'], 'pending', 2800000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', NULL),
-('20000000-0000-0000-0000-000000000007', ARRAY['10000000-0000-0000-0000-000000000004', '10000000-0000-0000-0000-000000000010'], 'completed', 1300000, 'c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Standard delivery'),
-('20000000-0000-0000-0000-000000000008', ARRAY['10000000-0000-0000-0000-000000000015'], 'delivered', 85000, 'd3eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'Small package'),
-('20000000-0000-0000-0000-000000000009', ARRAY['10000000-0000-0000-0000-000000000009', '10000000-0000-0000-0000-000000000011'], 'canceled', 630000, 'e4eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'Customer cancelled'),
-('20000000-0000-0000-0000-000000000010', ARRAY['10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000014'], 'shipping', 670000, 'f5eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'In transit'),
-('20000000-0000-0000-0000-000000000011', ARRAY['10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000004'], 'delivered', 27250000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Complete setup bundle'),
-('20000000-0000-0000-0000-000000000012', ARRAY['10000000-0000-0000-0000-000000000006'], 'confirmed', 3500000, 'c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', NULL),
-('20000000-0000-0000-0000-000000000013', ARRAY['10000000-0000-0000-0000-000000000013', '10000000-0000-0000-0000-000000000015'], 'pending', 335000, 'd3eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'Accessories order'),
-('20000000-0000-0000-0000-000000000014', ARRAY['10000000-0000-0000-0000-000000000008', '10000000-0000-0000-0000-000000000010'], 'returned', 9050000, 'e4eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'Monitor defective - returned'),
-('20000000-0000-0000-0000-000000000015', ARRAY['10000000-0000-0000-0000-000000000012'], 'completed', 120000, 'f5eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', NULL),
-('20000000-0000-0000-0000-000000000016', ARRAY['10000000-0000-0000-0000-000000000005', '10000000-0000-0000-0000-000000000009'], 'delivered', 1650000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Work from home setup'),
-('20000000-0000-0000-0000-000000000017', ARRAY['10000000-0000-0000-0000-000000000007', '10000000-0000-0000-0000-000000000004'], 'shipping', 3550000, 'c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Storage upgrade'),
-('20000000-0000-0000-0000-000000000018', ARRAY['10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000014'], 'pending', 2170000, 'd3eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'Gaming peripherals'),
-('20000000-0000-0000-0000-000000000019', ARRAY['10000000-0000-0000-0000-000000000006', '10000000-0000-0000-0000-000000000013'], 'refunded', 3750000, 'e4eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'Product not as described - refunded'),
-('20000000-0000-0000-0000-000000000020', ARRAY['10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012', '10000000-0000-0000-0000-000000000015'], 'completed', 385000, 'f5eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'Desk organization bundle');
+-- Insert 10 orders
+
+INSERT INTO demo.orders (id, order_items, order_status, payment_total, customer_id, order_detail) VALUES
+('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '[{"itemid":1, "quantity":2, "subtotal":50000}, {"itemid":3, "quantity":1, "subtotal":35000}]'::jsonb, 'delivered', 85000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Express shipping requested'),
+('a2eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', '[{"itemid":2, "quantity":3, "subtotal":36000}, {"itemid":5, "quantity":2, "subtotal":56000}, {"itemid":8, "quantity":5, "subtotal":40000}]'::jsonb, 'completed', 132000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Standard delivery'),
+('a3eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', '[{"itemid":7, "quantity":1, "subtotal":45000}, {"itemid":9, "quantity":2, "subtotal":44000}]'::jsonb, 'shipping', 89000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Gift wrap requested'),
+('a4eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', '[{"itemid":4, "quantity":4, "subtotal":60000}, {"itemid":6, "quantity":3, "subtotal":54000}, {"itemid":10, "quantity":1, "subtotal":32000}]'::jsonb, 'confirmed', 146000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Leave at door'),
+('a5eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', '[{"itemid":1, "quantity":5, "subtotal":125000}, {"itemid":2, "quantity":10, "subtotal":120000}]'::jsonb, 'pending', 245000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Waiting for payment confirmation'),
+('a6eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', '[{"itemid":3, "quantity":2, "subtotal":70000}, {"itemid":7, "quantity":1, "subtotal":45000}]'::jsonb, 'canceled', 115000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Customer requested cancellation'),
+('a7eebc99-9c0b-4ef8-bb6d-6bb9bd380a17', '[{"itemid":9, "quantity":3, "subtotal":66000}, {"itemid":5, "quantity":1, "subtotal":28000}, {"itemid":4, "quantity":2, "subtotal":30000}]'::jsonb, 'delivered', 124000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Signature required'),
+('a8eebc99-9c0b-4ef8-bb6d-6bb9bd380a18', '[{"itemid":6, "quantity":4, "subtotal":72000}, {"itemid":8, "quantity":6, "subtotal":48000}]'::jsonb, 'returned', 120000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Product defect reported'),
+('a9eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', '[{"itemid":10, "quantity":5, "subtotal":160000}, {"itemid":1, "quantity":3, "subtotal":75000}, {"itemid":7, "quantity":2, "subtotal":90000}]'::jsonb, 'completed', 325000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Bulk order for office supplies'),
+('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a20', '[{"itemid":2, "quantity":8, "subtotal":96000}, {"itemid":3, "quantity":1, "subtotal":35000}, {"itemid":6, "quantity":2, "subtotal":36000}]'::jsonb, 'refunded', 167000, 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Item not as described');

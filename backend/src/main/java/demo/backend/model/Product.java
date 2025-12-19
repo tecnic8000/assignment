@@ -1,7 +1,6 @@
 package demo.backend.model;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +15,7 @@ public class Product {
      @Id
      @GeneratedValue(strategy = GenerationType.AUTO)
      @Column(name = "id")
-     private UUID id;
+     private Integer id;
 
      @Column(name = "product_name")
      private String productName;

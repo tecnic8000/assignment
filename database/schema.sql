@@ -1,9 +1,6 @@
 -- DROP database IF EXISTS demo1intvw;
-
 -- CREATE database IF NOT EXISTS demo1intvw;
-
 -- \c demo1intvw
-
 CREATE SCHEMA IF NOT EXISTS demo;
 
 -- CREATE TABLES
@@ -17,7 +14,7 @@ CREATE TABLE demo.users (
 );
 
 CREATE TABLE demo.products (
-   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+   id INT PRIMARY KEY,
    product_name TEXT,
    product_desc TEXT DEFAULT NULL,
    product_price DECIMAL(9,0),
@@ -27,7 +24,7 @@ CREATE TABLE demo.products (
 
 CREATE TABLE demo.orders (
 	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-	order_item TEXT[], 
+	order_items JSONB, --  key-value array obj
    order_status TEXT DEFAULT 'pending', --pending | confirmed | shipping | delivered | completed | canceled | refunded | exchanged | returned
 	payment_total DECIMAL(9,0), -- 999,999,999 vnd
    order_detail TEXT ,

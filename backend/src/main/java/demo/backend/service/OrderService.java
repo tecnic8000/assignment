@@ -3,8 +3,6 @@ package demo.backend.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import demo.backend.model.Order;
@@ -31,11 +29,11 @@ public class OrderService {
      // create order
      @Transactional
      public Order create(Order theOrder, UUID userId) {
-          theOrder.setCustomerId(userService.findByUUID(userId));
+          theOrder.setCustomer(userService.findByUUID(userId));
           theOrder.setOrderStatus("pending");
 
           // DEDUCT PRODUCT STOCK
-          
+
 
           return orderRepo.save(theOrder);
      }
