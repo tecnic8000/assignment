@@ -3,7 +3,6 @@ package demo.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import demo.backend.model.Order;
 import demo.backend.model.OrderItem;
 import demo.backend.model.Product;
@@ -23,9 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/order")
@@ -109,9 +105,10 @@ public class RestOrder {
      }
 
      // VIEW ORDERS FOR ADMIN
-     @GetMapping("/viewall")
-     public ResponseEntity<?> viewAll(@RequestParam String param) {
-          return ResponseEntity.ok(Map.of("message", "order list for admin"));
+     @PostMapping("/viewall")
+     public ResponseEntity<?> viewAll() {
+          List<Order> allOrders = orderService.findAll();
+          return ResponseEntity.ok(Map.of("message", allOrders));
      }
 
 }

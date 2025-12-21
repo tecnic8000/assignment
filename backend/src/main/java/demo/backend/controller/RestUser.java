@@ -111,7 +111,7 @@ public class RestUser {
      }
 
      @PostMapping("/loginadmin")
-     public ResponseEntity<?> loginAdmin(@RequestBody Map<String,String> req, HttpServletResponse res) {
+     public ResponseEntity<?> loginAdmin(@RequestBody Map<String, String> req, HttpServletResponse res) {
           String password = req.get("password");
           // intentionally hardcoded for a simple demo
           Optional<User> hcAdmin = userService.findByUsername("admin_user");
@@ -146,7 +146,8 @@ public class RestUser {
 
      @PostMapping("/validate")
      public ResponseEntity<?> validateUser(
-               @CookieValue(value = "accessJwt") String accessCookie) {
+               @CookieValue(value = "accessJwt") String accessCookie,
+               HttpServletResponse res) {
           if (accessCookie == null || accessCookie.isBlank()) {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                          .body(Map.of("message", "Invalid jwt --01"));
@@ -154,8 +155,41 @@ public class RestUser {
           if (!jwtUtil.validateJwtToken(accessCookie)) {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                          .body(Map.of("message", "Session is invalid or expired"));
+
           }
-          return ResponseEntity.ok(Map.of("message", "session valid, resuming"));
+
+          // check username from token
+          String username = jwtUtil.getUsernameFromJwtToken(accessCookie);
+          if (username == null || username.isBlank()) {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                         .body(Map.of("message", "Invalid token payload"));
+          }
+
+          // Check if token is blacklisted
+          if (redisService.isJwtBlacklisted(accessCookie)) {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                         .body(Map.of("message", "Token is Blacklisted"));
+          }
+
+          // initiate new token
+          UserDetailsImpl userDetails = (UserDetailsImpl) userService.loadUserByUsername(username);
+          Authentication auth = new UsernamePasswordAuthenticationToken(
+               userDetails, 
+               null, 
+               userDetails.getAuthorities()
+          );
+          String newAccessToken = jwtUtil.generateAccessJwt(auth);
+
+          //embed into cookie
+          ResponseCookie responseAccessCookie = ResponseCookie.from("accessJwt", newAccessToken)
+                    .httpOnly(true)
+                    .secure(httpSecure)
+                    .path("/")
+                    .maxAge(10 * 60)
+                    .sameSite("None")
+                    .build();
+          res.addHeader("Set-Cookie", responseAccessCookie.toString());
+          return ResponseEntity.ok(Map.of("message", "session refreshed"));
      }
 
      @PostMapping("/logout")

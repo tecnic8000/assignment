@@ -21,7 +21,7 @@ public class OrderService {
      private UserService userService;
      private OrderRepo orderRepo;
 
-     public OrderService(OrderRepo theOrderRepo, UserService theUserService){
+     public OrderService(OrderRepo theOrderRepo, UserService theUserService) {
           orderRepo = theOrderRepo;
           userService = theUserService;
      }
@@ -34,20 +34,23 @@ public class OrderService {
 
           // DEDUCT PRODUCT STOCK
 
-
           return orderRepo.save(theOrder);
      }
 
      // retrieve order list and details
-     public List<Order> findAll(){
+     public List<Order> findAll() {
           return orderRepo.findAll();
      }
 
+     // public List<Order> findOrdersByCustomerId(UUID theId) {
+     // TypedQuery<Order> query = entityManager.createQuery(
+     // "SELECT o FROM Order o WHERE o.customer.id = :data", Order.class);
+     // query.setParameter("data", theId);
+     // return query.getResultList();
+     // }
+
      public List<Order> findOrdersByCustomerId(UUID theId) {
-          TypedQuery<Order> query = entityManager.createQuery(
-               "SELECT o FROM Order o WHERE o.customerId.id = :data", Order.class);
-          query.setParameter("data", theId);
-          return query.getResultList();
+          return orderRepo.findByCustomerId(theId);
      }
 
 }

@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,6 +46,7 @@ public class Order {
      @Column(name = "created_at")
      private Timestamp createdAt;
 
+     @JsonIgnore
      @ManyToOne(fetch = FetchType.LAZY)
      @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "fk_order_customer"))
      private User customer;

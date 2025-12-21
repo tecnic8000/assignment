@@ -13,6 +13,9 @@ public class OrderItem {
      @JsonProperty("itemid")
      private Integer itemId;
 
+     @JsonProperty("itemname")
+     private String itemName;
+
      @JsonProperty("quantity")
      private Integer quantity;
 

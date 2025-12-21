@@ -22,18 +22,18 @@ proof of concept submission
 
 # API ENDPOINTS
 ## USER
-`/api/user/signup` -
-`/api/user/login` -
-`/api/user/validate` -- used only by backend
-`/api/user/logout` -
+`/v1/user/signup` -
+`/v1/user/login` -
+`/v1/user/validate` -- used only by backend
+`/v1/user/logout` -
 ## PRODUCT
-`/api/product/create` -
-`/api/product/view` -
-`/api/product/delete/{id}` -
+`/v1/product/create` -
+`/v1/product/view` -
+`/v1/product/delete/{id}` -
 ## ORDER
-`/api/order/create` -
-`/api/order/view`
-`/api/order/viewall`
+`/v1/order/create` -
+`/v1/order/view` - 
+`/v1/order/viewall` -  
 
 
 # frontend

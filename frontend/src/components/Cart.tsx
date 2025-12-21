@@ -11,11 +11,10 @@ export default function Cart() {
                const submitUser = username || "anon"
                const submitItems: OrderItem[] = cart.map(item => ({
                     itemid: item.id,
+                    itemname :item.itemName,
                     quantity: item.quantity,
                     subtotal: getSubtotalPerItem(item)
                }))
-
-
 
                const res = await createNewOrder({
                     username: submitUser,

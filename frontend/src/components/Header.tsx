@@ -19,7 +19,8 @@ export default function Header() {
 
      return (
           <div className={`text-black space-x-5 py-3 ${role === "admin" ? "bg-orange-300" : "bg-white"}`}>
-               {(username !== null) && <Link to="/login">{username}---[VIEW HISTORY]</Link>}
+
+               {(location !== "/order" && username !== null) && <Link to="/order">{username}---[VIEW HISTORY]</Link>}
 
                {(location !== "/") && <Link to="/">[VIEW PRODUCTS]</Link>}
 
@@ -30,8 +31,8 @@ export default function Header() {
 
                {(location !== "/admin" && !authenticated) && <Link to="/admin">[ADMIN]</Link>}
 
-
                {authenticated && <button className='text-white' onClick={handleLogout}>LOG OUT</button>}
+
           </div>
      )
 }

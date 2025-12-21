@@ -1,5 +1,6 @@
 import axios from "axios"
 import type { Product } from "./store-cart"
+import { useUserStore } from "./store-user"
 export const API = "https://localhost:8011"
 
 export type Order = {
@@ -12,9 +13,59 @@ export type Order = {
 
 export type OrderItem = {
      itemid: number,
+     itemname: string,
      quantity: number,
      subtotal: number
 }
+
+const axiosInstance = axios.create()
+
+const PROTECTED_ENDPOINTS = [
+     '/api/product/create',
+     '/api/product/delete',
+     '/api/order/create',
+     '/api/order/view',
+     '/api/order/viewall',
+     '/api/user/logout'
+]
+
+axiosInstance.interceptors.request.use(
+     async (config) => {
+          // Check if this endpoint requires JWT validation
+          const isProtected = PROTECTED_ENDPOINTS.some(endpoint =>
+               config.url?.includes(endpoint)
+          );
+          if (isProtected) {
+               try {
+                    await axios.post(`${API}/api/user/validate`, {}, { withCredentials: true });
+                    console.log('JWT validated and refreshed');
+               } catch (err) {
+                    console.error('JWT validation failed, log in again', err);
+               }
+          } return config;
+     },
+     (error) => { return Promise.reject(error); }
+);
+
+axiosInstance.interceptors.response.use(
+     (response) => { return response; },
+     (error) => {
+          // Check if error is 401 Unauthorized
+          if (error.response && error.response.status === 401) {
+               console.error('401 caught Session expired or invalid token');
+               // Optional: You can dispatch a custom event for toast notifications
+               window.dispatchEvent(new CustomEvent('unauthorized', {
+                    detail: { message: 'Session expired. Please login again.' }
+               }));
+               // Optional: Redirect to login page
+               const { clearUser } = useUserStore.getState();
+               window.location.href = '/';
+               clearUser()
+
+          }
+          return Promise.reject(error);
+     }
+);
 
 // PRODUCT
 export async function getProducts() {
@@ -25,7 +76,7 @@ export async function getProducts() {
 }
 export async function createProduct(newProduct: Product) {
      try {
-          const res = await axios.post(
+          const res = await axiosInstance.post(
                `${API}/api/product/create`,
                newProduct,
                { withCredentials: true })
@@ -34,7 +85,7 @@ export async function createProduct(newProduct: Product) {
 }
 export async function deleteProduct(id: number) {
      try {
-          const res = await axios.delete(
+          const res = await axiosInstance.delete(
                `${API}/api/product/delete/${id}`,
                { withCredentials: true },)
           console.log("product deleted", res.status, res.data)
@@ -77,7 +128,7 @@ export async function validate() {
 
 export async function logout() {
      try {
-          const res = await axios.post(
+          const res = await axiosInstance.post(
                `${API}/api/user/logout`,
                {},
                { withCredentials: true }
@@ -89,7 +140,7 @@ export async function logout() {
 // ORDER
 export async function createNewOrder(newOrder: Order) {
      try {
-          const res = await axios.post(
+          const res = await axiosInstance.post(
                `${API}/api/order/create`,
                newOrder,
                { withCredentials: true })
@@ -101,15 +152,16 @@ export async function createNewOrder(newOrder: Order) {
 
 export async function viewOrder() {
      try {
-          const res = await axios.post(
-               `${API}/api/order/view`,
-               {},
-               { withCredentials: true })
+          const res = await axiosInstance.post(`${API}/api/order/view`, {}, { withCredentials: true })
           return res.data
      } catch (err) { console.log("viewHistory1 failed--01", err) }
 }
-
-
+export async function viewAllOrders() {
+     try {
+          const res = await axiosInstance.post(`${API}/api/order/viewall`, {}, { withCredentials: true })
+          return res.data
+     } catch (err) { console.log(err) }
+}
 
 // ping
 export async function ping() {
