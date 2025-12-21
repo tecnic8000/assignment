@@ -77,11 +77,13 @@ public class RestUser {
      public ResponseEntity<?> loginUser(@RequestBody User loginUser, HttpServletResponse res) {
           // existCheck
           Optional<User> existingUser = userService.findByUsername(loginUser.getUsername());
+          System.out.println("=== 2. USER FOUND: " + existingUser.isPresent() + " ===");
           if (!existingUser.isPresent()) {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                          .body(Map.of("message", "invalid email or password"));
           }
           // newLogin
+          System.out.println("=== 3. BEFORE AUTHENTICATION ===");
           try {
                Authentication auth = authenticationManager.authenticate(
                          new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
@@ -89,18 +91,19 @@ public class RestUser {
                UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
                List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                          .collect(Collectors.toList());
+               String role = roles.get(0).replace("ROLE_", "");
                String accessToken = jwtUtil.generateAccessJwt(auth);
                ResponseCookie responseAccessCookie = ResponseCookie.from("accessJwt", accessToken)
                          .httpOnly(true)
                          .secure(httpSecure) // true for HTTPS production
                          .path("/")
-                         .maxAge(15 * 60)
+                         .maxAge(10 * 60)
                          .sameSite("None")
                          .build();
                res.addHeader("Set-Cookie", responseAccessCookie.toString());
                return ResponseEntity.ok(Map.of(
-                         "email", userDetails.getUsername(),
-                         "roles", roles));
+                         "username", userDetails.getUsername(),
+                         "role", role));
           } catch (BadCredentialsException e) {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                          .body(Map.of("statusText", "invalid email or password"));
@@ -108,32 +111,36 @@ public class RestUser {
      }
 
      @PostMapping("/loginadmin")
-     public ResponseEntity<?> loginAdmin(@RequestBody String password, HttpServletResponse res) {
+     public ResponseEntity<?> loginAdmin(@RequestBody Map<String,String> req, HttpServletResponse res) {
+          String password = req.get("password");
           // intentionally hardcoded for a simple demo
           Optional<User> hcAdmin = userService.findByUsername("admin_user");
           User admin = hcAdmin.get();
+          System.out.println("ADMIN FOUND");
           try {
                Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(admin.getUsername(), password));
+                         new UsernamePasswordAuthenticationToken(admin.getUsername(), password));
                SecurityContextHolder.getContext().setAuthentication(auth);
+               System.out.println("AUTH PASSED");
                UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
                List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                          .collect(Collectors.toList());
+               String role = roles.get(0).replace("ROLE_", "");
                String accessToken = jwtUtil.generateAccessJwt(auth);
                ResponseCookie responseAccessCookie = ResponseCookie.from("accessJwt", accessToken)
                          .httpOnly(true)
                          .secure(httpSecure) // true for HTTPS production
                          .path("/")
-                         .maxAge(15 * 60)
+                         .maxAge(10 * 60)
                          .sameSite("None")
                          .build();
                res.addHeader("Set-Cookie", responseAccessCookie.toString());
                return ResponseEntity.ok(Map.of(
-                         "email", userDetails.getUsername(),
-                         "roles", roles));
+                         "username", userDetails.getUsername(),
+                         "role", role));
           } catch (BadCredentialsException e) {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                         .body(Map.of("statusText", "invalid email or password"));
+                         .body(Map.of("statusText", "CRASHED -00X"));
           }
      }
 

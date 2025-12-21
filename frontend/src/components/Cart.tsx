@@ -1,28 +1,38 @@
-import { createNewOrder } from '../service/backend';
+import { createNewOrder, type OrderItem } from '../service/backend';
 import { useCartStore } from '../service/store-cart';
+import { useUserStore } from '../service/store-user';
 
 export default function Cart() {
-
+     const { username } = useUserStore()
      const { cart, addItem, substractItem, removeItem, getSubtotalPerItem, getTotalItems, getTotalPayment, clearCart } = useCartStore();
-
      async function submitOrder() {
           console.log("submitting order ...")
           try {
+               const submitUser = username || "anon"
+               const submitItems: OrderItem[] = cart.map(item => ({
+                    itemid: item.id,
+                    quantity: item.quantity,
+                    subtotal: getSubtotalPerItem(item)
+               }))
+
+
+
                const res = await createNewOrder({
-                    username: "unknown",
-                    orderItems: cart,
+                    username: submitUser,
+                    orderItems: submitItems,
                     orderDetail: "example",
-                    orderStatus:"pending",
+                    orderStatus: "pending",
                     paymentTotal: getTotalPayment()
                })
                console.log(res)
+               clearCart()
           } catch (err) {
                console.log("Submission crashed --", err)
           }
      }
-
+     // console.log(cart)
      return (
-          <div className="bg-green-950 p-3 mt-4">
+          <div className={`bg-green-950 p-3 mt-4 ${(!cart || cart.length === 0) ? "hidden" : ""}`} >
                <div className='py-5 space-x-4'>
                     <button onClick={() => clearCart()}>RESET</button>
 

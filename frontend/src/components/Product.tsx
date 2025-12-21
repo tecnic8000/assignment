@@ -4,20 +4,21 @@ import { useCartStore } from '../service/store-cart';
 
 import type { Product } from "../service/store-cart"
 import { useUserStore } from "../service/store-user";
+import { useNavigate } from "react-router-dom";
 
 export default function Product() {
      const [loading, setLoading] = useState(true)
      const [menu, setMenu] = useState<Product[]>([])
      const { addItem } = useCartStore()
      const { role, username, authenticated } = useUserStore()
-
+     const navigate = useNavigate()
 
      const [productName, setProductName] = useState("")
      const [productDesc, setProductDesc] = useState("")
      const [productPrice, setProductPrice] = useState(0)
      const [productStock, setProductStock] = useState(0)
 
-     console.log(username)
+     console.log(username, authenticated, role)
      useEffect(() => {
           let cancelled = false;
           async function getMenu() {
@@ -42,6 +43,7 @@ export default function Product() {
           try {
                const res = await deleteProduct(productid)
                console.log("product deleted", res)
+               navigate("/")
           } catch (err) { console.log(err) }
      }
 
@@ -77,22 +79,23 @@ export default function Product() {
                                         <td >{item.productName}</td>
                                         <td>{item.productDesc}</td>
                                         <td>{item.productPrice}</td>
-                                        {authenticated &&
-                                             <tr>
+                                        {( authenticated && role !== "admin" ) &&
+                                             <td>
                                                   <button onClick={() => addItem({ id: item.id, itemName: item.productName, quantity: 1, unitprice: item.productPrice })}>
                                                        ADD TO CART
                                                   </button>
-                                             </tr>}
+                                             </td>}
                                         {(role == "admin") &&
-                                             <tr>
+                                             <td>
                                                   <button onClick={() => handleDelete(item.id)}>
                                                        DELETE
                                                   </button>
-                                             </tr>}
+                                             </td>}
                                    </tr>)
                          })}
                     </tbody>
                </table>
+
 
                {(role == "admin") &&
                     <form onSubmit={handleCreate} className="p-5 bg-blue-900 space-y-2">

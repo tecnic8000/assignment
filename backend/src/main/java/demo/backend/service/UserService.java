@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
      @Autowired
      private EntityManager entityManager;
@@ -50,6 +51,7 @@ public class UserService {
           return theUser;
      }
 
+     @Override
      public  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
           User user = userRepo.findByUsername(username)
                .orElseThrow(()-> new UsernameNotFoundException("userDetails usernameNotFound caught:"+username));
@@ -59,7 +61,7 @@ public class UserService {
      // USER TO VIEW ORDERS
      public List<Order> findOrdersByUsername(String username){
          TypedQuery<Order> query = entityManager.createQuery(
-          "SELECT o FROM Order o JOIN o.customerId u WHERE u.username = :data", Order.class); 
+          "SELECT o FROM Order o JOIN o.customer u WHERE u.username = :data", Order.class); 
           query.setParameter("data", username);
           return query.getResultList();
      }

@@ -2,23 +2,28 @@ import axios from "axios";
 import { useEffect, useState, type FormEvent } from "react";
 import { API } from "../service/backend";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../service/store-user";
 
 export default function Admin() {
      const [password, setPassword] = useState("")
-     const [isAdminloginOK, setIsAdminloginOK] = useState(false)
+     const { setUser, authenticated } = useUserStore()
      const navigate = useNavigate()
 
-     useEffect(() => {
-          if (isAdminloginOK) navigate("/")
-     }, [isAdminloginOK, navigate])
 
+     useEffect(() => {
+          if (authenticated) navigate("/")
+     }, [authenticated, navigate])
 
      async function handleSubmit(e: FormEvent<HTMLFormElement>) {
           e.preventDefault()
           try {
-               const res = await axios.post(`${API}/api/user/loginadmin`, password)
+               const res = await axios.post(
+                    `${API}/api/user/loginadmin`,
+                    { password: password },
+                    { withCredentials: true })
                console.log("admin logged in -- ", res.status, res.data)
-               setIsAdminloginOK(true)
+               setUser(res.data.username,res.data.role)
+               navigate("/")
           } catch (err) { console.log("adminLogin crashed --", err) }
      }
      return (

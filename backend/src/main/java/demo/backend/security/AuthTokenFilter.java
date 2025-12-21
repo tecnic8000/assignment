@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import demo.backend.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,8 +37,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     String path = request.getRequestURI();
     // for public endpoints
-    if (path.equals("/api/user/login") || path.equals("/api/user/signup") || path.equals("/api/product/view")
-        || path.startsWith("/admin") || path.equals("/api/ping") || path.equals("/api/product/view")) {
+    if (path.equals("/api/user/login") ||
+        path.equals("/api/user/signup") || 
+        path.equals("/api/user/validate") ||
+        path.equals("/api/product/view") || 
+        path.equals("/api/user/loginadmin") || 
+        path.equals("/api/ping")) {
       logger.info("Bypassing JWT filter for public endpoint: {}", path);
       filterChain.doFilter(request, response);
       return;
@@ -60,9 +65,28 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   }
 
   private String parseJwt(HttpServletRequest request) {
+    // First try to get JWT from cookie
+    String jwt = getJwtFromCookie(request);
+    if (jwt != null) {
+      return jwt;
+    }
+
+    // Fallback to Authorization header
     String headerAuth = request.getHeader("Authorization");
     if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
       return headerAuth.substring(7, headerAuth.length());
+    }
+    return null;
+  }
+
+  private String getJwtFromCookie(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if ("accessJwt".equals(cookie.getName())) {
+          return cookie.getValue();
+        }
+      }
     }
     return null;
   }

@@ -5,7 +5,6 @@ import Login from './components/Login'
 import Product from './components/Product'
 import Order from './components/Order'
 import Signup from './components/Signup'
-import Checkout from './components/Checkout'
 import Admin from './components/Admin'
 
 const router = createBrowserRouter([
@@ -32,11 +31,8 @@ const router = createBrowserRouter([
       {
         path: '/admin',
         element: <Admin/>
-      },
-      {
-        path: '/checkout',
-        element: <Checkout/>
       }
+      
     ]
   },
 ])

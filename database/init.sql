@@ -6,16 +6,18 @@ INSERT INTO demo.users (id, username, password, role) VALUES
 
 -- Insert 10 products
 INSERT INTO demo.products (id, product_name, product_desc, product_price, product_stock) VALUES
-(1, 'Wireless Mouse', 'Ergonomic wireless mouse with 2.4GHz connectivity and adjustable DPI', 25000, 150),
-(2, 'USB-C Cable', '6ft braided USB-C charging cable, fast charging compatible', 12000, 300),
-(3, 'Desk Lamp', 'LED desk lamp with 3 brightness levels and flexible neck', 35000, 75),
-(4, 'Notebook Set', 'Pack of 3 lined notebooks, 100 pages each, A5 size', 15000, 200),
-(5, 'Water Bottle', 'Stainless steel insulated water bottle, 32oz capacity', 28000, 120),
-(6, 'Phone Stand', 'Adjustable aluminum phone stand for desk use', 18000, 180),
-(7, 'Bluetooth Speaker', 'Portable waterproof speaker with 12-hour battery life', 45000, 90),
-(8, 'Mechanical Pencil', 'Professional 0.5mm mechanical pencil with metal body', 8000, 250),
-(9, 'Laptop Sleeve', '13-inch padded laptop sleeve with front pocket', 22000, 100),
-(10, 'Desk Organizer', 'Bamboo desk organizer with multiple compartments', 32000, 65);
+(1, 'Wireless Mouse', 'sampleDesc1', 25000, 10),
+(2, 'USB-C Cable', 'sampleDesc2', 12000, 10),
+(3, 'Desk Lamp', 'sampleDesc3', 35000, 10),
+(4, 'Notebook Set', 'sampleDesc4', 15000, 10),
+(5, 'Water Bottle', 'sampleDesc5', 28000, 10),
+(6, 'Phone Stand', 'sampleDesc6', 18000, 10),
+(7, 'Bluetooth Speaker', 'sampleDesc7', 45000, 4),
+(8, 'Mechanical Pencil', 'sampleDesc8', 8000, 10),
+(9, 'Laptop Sleeve', 'sampleDesc9', 22000, 10),
+(10, 'Desk Organizer', 'sampleDesc10', 32000, 10);
+-- Reset the sequence to the maximum existing ID + 1
+SELECT setval('demo.products_id_seq', (SELECT COALESCE(MAX(id), 0) FROM demo.products) + 1, false);
 
 -- Insert 10 orders
 

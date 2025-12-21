@@ -5,6 +5,8 @@ export type UserState = {
      username: string | null
      role: string | null
      authenticated: boolean
+     setUser: (username: string, role:string) => void
+     clearUser:() => void
 }
 
 export const useUserStore = create<UserState>((set) => ({

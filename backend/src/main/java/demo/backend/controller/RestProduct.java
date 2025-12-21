@@ -12,6 +12,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,6 +30,7 @@ public class RestProduct {
      // CREATE A PRODUCT
      @PostMapping("/create")
      public ResponseEntity<?> createProduct(@RequestBody Product newProduct) {
+         newProduct.setId(null);
          Product submiProduct = productService.create(newProduct);
          return ResponseEntity.ok(Map.of("message", submiProduct));
      }
@@ -41,11 +43,9 @@ public class RestProduct {
           return ResponseEntity.ok(Map.of("message", productList));
      }
      // DELETE A PRODUCT
-     @DeleteMapping("/delete")
-     public ResponseEntity<?> deleteProduct(@RequestBody Product deleteProduct ){
-          Integer deleteId = deleteProduct.getId();
-          productService.delete(deleteId);
-          return ResponseEntity.ok(Map.of("message","product"+deleteId+"DELETED"));
-
+     @DeleteMapping("/delete/{id}")
+     public ResponseEntity<?> deleteProduct(@PathVariable Integer id ){
+          productService.delete(id);
+          return ResponseEntity.ok(Map.of("message","product"+id+"DELETED"));
      }
 }

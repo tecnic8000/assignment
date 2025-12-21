@@ -39,6 +39,7 @@ public class ProductService {
      }
 
      // UPDATE STOCK: DEDUCT AND AUTO-DELETE IF 0
+     @Transactional
      public void updateStock(Product theProduct, Integer deductAmount){
           Integer currentStock = theProduct.getProductStock();
           Integer newStock = currentStock - deductAmount;
@@ -47,6 +48,7 @@ public class ProductService {
                productRepo.deleteById(theProduct.getId());
           } else {
                theProduct.setProductStock(newStock);
+               productRepo.save(theProduct);
           }
      }
 

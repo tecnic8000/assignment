@@ -13,7 +13,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = "customer")
+@EqualsAndHashCode(exclude = "customer")
 @AllArgsConstructor
 @NoArgsConstructor
 @Table (name = "orders", schema = "demo")

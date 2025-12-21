@@ -1,13 +1,19 @@
 import axios from "axios"
-import type { CartItem, Product } from "./store-cart"
-export const API = "http://localhost:8011"
+import type { Product } from "./store-cart"
+export const API = "https://localhost:8011"
 
 export type Order = {
-     orderItems: CartItem[],
      username: string,
+     orderItems: OrderItem[],
      orderDetail: string,
      orderStatus: "pending" | "paid",
      paymentTotal: number,
+}
+
+export type OrderItem = {
+     itemid: number,
+     quantity: number,
+     subtotal: number
 }
 
 // PRODUCT
@@ -21,15 +27,15 @@ export async function createProduct(newProduct: Product) {
      try {
           const res = await axios.post(
                `${API}/api/product/create`,
-               { newProduct },
+               newProduct,
                { withCredentials: true })
           console.log("new product created", res.status, res.data)
      } catch (err) { console.log("createProduct failed --07", err) }
 }
-export async function deleteProduct(productId: number) {
+export async function deleteProduct(id: number) {
      try {
           const res = await axios.delete(
-               `${API}/api/product/delete/${productId}`,
+               `${API}/api/product/delete/${id}`,
                { withCredentials: true },)
           console.log("product deleted", res.status, res.data)
      } catch (err) { console.log("ERR delete --05", err) }
@@ -49,7 +55,8 @@ export async function login(username: string, password: string) {
      try {
           const res = await axios.post(
                `${API}/api/user/login`,
-               { username: username, password: password }
+               { username: username, password: password },
+               { withCredentials: true }
           )
           console.log('user logged in --', res.data)
           return res.data
@@ -84,7 +91,7 @@ export async function createNewOrder(newOrder: Order) {
      try {
           const res = await axios.post(
                `${API}/api/order/create`,
-               { newOrder },
+               newOrder,
                { withCredentials: true })
           console.log("status createNewOrder: ", res.status, res.data)
      } catch (err) {

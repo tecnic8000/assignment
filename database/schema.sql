@@ -14,7 +14,7 @@ CREATE TABLE demo.users (
 );
 
 CREATE TABLE demo.products (
-   id INT PRIMARY KEY,
+   id SERIAL PRIMARY KEY,
    product_name TEXT,
    product_desc TEXT DEFAULT NULL,
    product_price DECIMAL(9,0),

@@ -2,6 +2,8 @@ package demo.backend.model;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +15,7 @@ import lombok.*;
 public class Product {
 
      @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
      @Column(name = "id")
      private Integer id;
 
@@ -29,6 +31,7 @@ public class Product {
      @Column(name = "product_stock")
      private Integer productStock;
 
+     @CreationTimestamp
      @Column(name = "created_at")
      private Timestamp createdAt;
 

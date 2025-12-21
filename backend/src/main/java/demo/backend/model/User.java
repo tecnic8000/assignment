@@ -10,11 +10,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = "orders")
+@EqualsAndHashCode(exclude = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users", schema = "demo")

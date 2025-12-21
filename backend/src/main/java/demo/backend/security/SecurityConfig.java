@@ -62,6 +62,7 @@ public class SecurityConfig {
           CorsConfiguration config = new CorsConfiguration();
           config.addAllowedOrigin("https://localhost:5173");
           config.addAllowedHeader("*");
+          config.addAllowedMethod("*");
           config.setAllowCredentials(true);
           source.registerCorsConfiguration("/**", config);
           return new CorsFilter(source);
@@ -71,16 +72,16 @@ public class SecurityConfig {
      public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
           http.cors(Customizer.withDefaults()).authorizeHttpRequests(configurer -> configurer
                .requestMatchers(HttpMethod.GET, "/api/ping").permitAll()
-               .requestMatchers(HttpMethod.GET, "/admin/**").permitAll()
-
+               
+               .requestMatchers(HttpMethod.POST, "/api/user/loginadmin").permitAll()
                .requestMatchers(HttpMethod.POST, "/api/user/signup").permitAll()
                .requestMatchers(HttpMethod.POST, "/api/user/login").permitAll()
                .requestMatchers(HttpMethod.POST, "/api/user/validate").permitAll() //TODO system only
-               .requestMatchers(HttpMethod.POST, "/api/user/logout").hasRole("customer")
+               .requestMatchers(HttpMethod.POST, "/api/user/logout").hasAnyRole("customer", "admin")
 
                .requestMatchers(HttpMethod.POST, "/api/product/create").hasRole("admin")
                .requestMatchers(HttpMethod.GET, "/api/product/view").permitAll()
-               .requestMatchers(HttpMethod.DELETE, "/api/product/delete").hasRole("admin")
+               .requestMatchers(HttpMethod.DELETE, "/api/product/delete/**").hasRole("admin")
 
                .requestMatchers(HttpMethod.POST, "/api/order/create").hasRole("customer")
                .requestMatchers(HttpMethod.POST, "/api/order/view").hasRole("customer")
