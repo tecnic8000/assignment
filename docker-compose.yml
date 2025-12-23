@@ -3,8 +3,8 @@ version: '3.8'
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:16-alpine
-    container_name: demo-postgres
+    image: postgres:17-alpine
+    container_name: demo1-postgres
     environment:
       POSTGRES_DB: demo1intvw
       POSTGRES_USER: postgres
@@ -23,8 +23,8 @@ services:
 
   # Redis
   redis:
-    image: redis:7-alpine
-    container_name: demo-redis
+    image: redis:8-alpine
+    container_name: demo1-redis
     ports:
       - "6379:6379"
     volumes:
@@ -42,7 +42,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: demo-backend
+    container_name: demo1-backend
     ports:
       - "8011:8011"
     environment:

@@ -27,11 +27,11 @@ proof of concept submission
 `/v1/user/validate` -- used only by backend
 `/v1/user/logout` -
 ## PRODUCT
-`/v1/product/create` -
+`/v1/product/create` - missing 201
 `/v1/product/view` -
 `/v1/product/delete/{id}` -
 ## ORDER
-`/v1/order/create` -
+`/v1/order/create` - missing 201
 `/v1/order/view` - 
 `/v1/order/viewall` -  
 
